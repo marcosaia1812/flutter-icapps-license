@@ -2,6 +2,7 @@ name: icapps_license
 description: Dart tool to generate a file that contains all licenses of the third party libraries
 version: 2.0.0
 homepage: https://github.com/icapps/flutter-icapps-license
+repository: https://github.com/marcosaia1812/flutter-icapps-license
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

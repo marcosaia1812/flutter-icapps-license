@@ -11,7 +11,7 @@ const baseUrl = 'https://pub.dev/api/packages/';
 const urlVersionPath = '/versions/';
 const licensePath = '/blob/master/LICENSE';
 
-final outputFilePath = join('lib', 'util', 'license.dart');
+final outputFilePath = join('lib', 'util', 'licenses.md');
 
 Future<void> main(List<String> args) async {
   final pubspecYaml = File(join(Directory.current.path, 'pubspec.yaml'));
@@ -24,52 +24,14 @@ Future<void> main(List<String> args) async {
   final params = Params();
   await params.init(pubspecContent);
 
+  final sb = StringBuffer();
+
   final outputFile = File(outputFilePath);
   if (!outputFile.existsSync()) {
     outputFile.createSync(recursive: true);
   }
 
   final nullableFieldInfix = params.nullSafe ? '?' : '';
-
-  final sb = StringBuffer()
-    ..writeln(
-        '//============================================================//')
-    ..writeln('//THIS FILE IS AUTO GENERATED. DO NOT EDIT//')
-    ..writeln(
-        '//============================================================//')
-    ..writeln()
-    ..writeln('class License {')
-    ..writeln('  final String name;')
-    ..writeln('  final String license;')
-    ..writeln('  final String$nullableFieldInfix version;')
-    ..writeln('  final String$nullableFieldInfix url;')
-    ..writeln('  final String$nullableFieldInfix licenseUrl;')
-    ..writeln()
-    ..writeln('  License({');
-  if (params.nullSafe) {
-    sb
-      ..writeln('   required this.name,')
-      ..writeln('   required this.license,')
-      ..writeln('   this.version,')
-      ..writeln('   this.licenseUrl,')
-      ..writeln('   this.url,');
-  } else {
-    sb
-      ..writeln('   this.name,')
-      ..writeln('   this.version,')
-      ..writeln('   this.licenseUrl,')
-      ..writeln('   this.license,')
-      ..writeln('   this.url,');
-  }
-  sb
-    ..writeln('  });')
-    ..writeln('}')
-    ..writeln()
-    ..writeln('class LicenseUtil {')
-    ..writeln('  LicenseUtil._();')
-    ..writeln()
-    ..writeln('  static List<License> getLicenses() {')
-    ..writeln('    return <License>[]');
 
   params.dependencies.forEach((e) {
     sb.write(_getDependencyText(e));
@@ -78,11 +40,6 @@ Future<void> main(List<String> args) async {
   params.devDependencies.forEach((e) {
     sb.write(_getDependencyText(e));
   });
-
-  sb
-    ..write(';')
-    ..writeln('  }')
-    ..writeln('}');
 
   outputFile.writeAsStringSync(sb.toString());
 
@@ -97,12 +54,9 @@ Future<void> main(List<String> args) async {
 
 String _getDependencyText(Dependency dependency) {
   final sb = StringBuffer()
-    ..writeln('      ..add(License(')
-    ..writelnWithQuotesOrNull('name', dependency.name)
-    ..writelnWithQuotesOrNull('version', dependency.version)
-    ..writelnWithQuotesOrNull('url', dependency.url)
-    ..writelnWithQuotesOrNull('licenseUrl', dependency.licenseUrl)
-    ..writeln('        license: \'\'\'${dependency.license}\'\'\',')
-    ..writeln('      ))');
+    ..writelnWithQuotesOrNull('Name', dependency.name)
+    ..writelnWithQuotesOrNull('Version', dependency.version)
+    ..writelnWithQuotesOrNull('License URL', dependency.licenseUrl)
+    ..writeln('\n\n${dependency.license}\n ========================================\n');
   return sb.toString();
 }
