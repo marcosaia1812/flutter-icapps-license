@@ -11,7 +11,7 @@ const baseUrl = 'https://pub.dev/api/packages/';
 const urlVersionPath = '/versions/';
 const licensePath = '/blob/master/LICENSE';
 
-final outputFilePath = join('lib', 'util', 'licenses.md');
+final outputFilePath = join('pubspec_licenses.txt');
 
 Future<void> main(List<String> args) async {
   final pubspecYaml = File(join(Directory.current.path, 'pubspec.yaml'));
@@ -57,6 +57,7 @@ String _getDependencyText(Dependency dependency) {
     ..writelnWithQuotesOrNull('Name', dependency.name)
     ..writelnWithQuotesOrNull('Version', dependency.version)
     ..writelnWithQuotesOrNull('License URL', dependency.licenseUrl)
-    ..writeln('\n\n${dependency.license}\n ========================================\n');
+    ..writeln(
+        '\n\n${dependency.license}\n ========================================\n');
   return sb.toString();
 }
