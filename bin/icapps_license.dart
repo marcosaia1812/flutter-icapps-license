@@ -58,6 +58,6 @@ String _getDependencyText(Dependency dependency) {
     ..writelnWithQuotesOrNull('Version', dependency.version)
     ..writelnWithQuotesOrNull('License URL', dependency.licenseUrl)
     ..writeln(
-        '\n\n${dependency.license}\n ========================================\n');
+        '\n\n${dependency.license}\n//-------------------------------------------------------------\n');
   return sb.toString();
 }
